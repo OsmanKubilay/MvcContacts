@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MvcContacts.Models;
 using System.Diagnostics;
 
 namespace MvcContacts.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -15,6 +17,7 @@ namespace MvcContacts.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 
