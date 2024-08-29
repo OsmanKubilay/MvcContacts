@@ -4,11 +4,16 @@
     ViewData["Title"] = "Contacts";
 }
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+
 <div class="container mt-4">
     <h1 class="mb-4">Contacts</h1>
 
     <p>
-        <a class="btn btn-primary" asp-action="Create">Create New</a>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+            <i class="bi bi-plus me-2"></i> Create New
+        </button>
     </p>
 
     <div class="table-responsive">
@@ -31,9 +36,15 @@
                         <td>@item.Email</td>
                         <td>@item.PhoneNumber</td>
                         <td>
-                            <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                            <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" data-id="@item.Id" data-firstname="@item.FirstName" data-lastname="@item.LastName" data-email="@item.Email" data-phonenumber="@item.PhoneNumber">
+                                <i class="bi bi-pencil me-2"></i> Edit
+                            </button>
+                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal" data-id="@item.Id" data-firstname="@item.FirstName" data-lastname="@item.LastName" data-email="@item.Email" data-phonenumber="@item.PhoneNumber">
+                                <i class="bi bi-eye me-2"></i> Details
+                            </button>
+                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.Id" data-firstname="@item.FirstName" data-lastname="@item.LastName" data-email="@item.Email" data-phonenumber="@item.PhoneNumber">
+                                <i class="bi bi-trash me-2"></i> Delete
+                            </button>
                         </td>
                     </tr>
                 }
@@ -41,3 +52,192 @@
         </table>
     </div>
 </div>
+
+@* Create Modal *@
+
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Create Contact</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createForm" asp-action="Create" method="post">
+                    <div class="mb-3">
+                        <label for="createFirstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="createFirstName" name="FirstName" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="createLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="createLastName" name="LastName" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="createEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="createEmail" name="Email" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="createPhoneNumber" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="createPhoneNumber" name="PhoneNumber" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check me-2"></i> Save
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-2"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Edit Modal *@
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Contact</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" asp-action="Edit" method="post">
+                    <input type="hidden" id="editId" name="Id" />
+                    <div class="mb-3">
+                        <label for="editFirstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="editFirstName" name="FirstName" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="editLastName" name="LastName" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="editEmail" name="Email" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPhoneNumber" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="editPhoneNumber" name="PhoneNumber" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check me-2"></i> Save Changes
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-2"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Details Modal *@
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Contact Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3>Contact Information</h3>
+                <dl class="row">
+                    <dt class="col-sm-4">First Name</dt>
+                    <dd class="col-sm-8" id="detailsFirstName"></dd>
+                    <dt class="col-sm-4">Last Name</dt>
+                    <dd class="col-sm-8" id="detailsLastName"></dd>
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8" id="detailsEmail"></dd>
+                    <dt class="col-sm-4">Phone Number</dt>
+                    <dd class="col-sm-8" id="detailsPhoneNumber"></dd>
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-2"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Delete Modal *@
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Contact</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3>Are you sure you want to delete this contact?</h3>
+                <div>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-4">First Name</dt>
+                        <dd class="col-sm-8" id="deleteFirstName"></dd>
+                        <dt class="col-sm-4">Last Name</dt>
+                        <dd class="col-sm-8" id="deleteLastName"></dd>
+                        <dt class="col-sm-4">Email</dt>
+                        <dd class="col-sm-8" id="deleteEmail"></dd>
+                        <dt class="col-sm-4">Phone Number</dt>
+                        <dd class="col-sm-8" id="deletePhoneNumber"></dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" asp-action="Delete" method="post">
+                    <input type="hidden" id="deleteId" name="Id" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i> Delete
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg me-2"></i> Cancel
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[data-bs-toggle="modal"]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var id = this.getAttribute('data-id');
+                var firstName = this.getAttribute('data-firstname');
+                var lastName = this.getAttribute('data-lastname');
+                var email = this.getAttribute('data-email');
+                var phoneNumber = this.getAttribute('data-phonenumber');
+
+                if (this.dataset.bsTarget === '#editModal') {
+                    document.getElementById('editId').value = id;
+                    document.getElementById('editFirstName').value = firstName;
+                    document.getElementById('editLastName').value = lastName;
+                    document.getElementById('editEmail').value = email;
+                    document.getElementById('editPhoneNumber').value = phoneNumber;
+                } else if (this.dataset.bsTarget === '#detailsModal') {
+                    document.getElementById('detailsFirstName').textContent = firstName;
+                    document.getElementById('detailsLastName').textContent = lastName;
+                    document.getElementById('detailsEmail').textContent = email;
+                    document.getElementById('detailsPhoneNumber').textContent = phoneNumber;
+                } else if (this.dataset.bsTarget === '#deleteModal') {
+                    document.getElementById('deleteId').value = id;
+                    document.getElementById('deleteFirstName').textContent = firstName;
+                    document.getElementById('deleteLastName').textContent = lastName;
+                    document.getElementById('deleteEmail').textContent = email;
+                    document.getElementById('deletePhoneNumber').textContent = phoneNumber;
+                }
+            });
+        });
+    });
+</script>
